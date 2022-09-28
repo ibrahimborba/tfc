@@ -8,10 +8,10 @@ import { Response } from 'superagent';
 chai.use(chaiHttp);
 const { expect } = chai;
 
-describe('Test login route', () => {
+describe('Test login routes', () => {
   let chaiHttpResponse: Response;
 
-  describe('Valid user', () => {
+  describe('POST /login Valid user', () => {
     
     before(async () => {
       chaiHttpResponse = await chai
@@ -32,7 +32,7 @@ describe('Test login route', () => {
     });
   })
 
-  describe('Empty email field', () => {
+  describe('POST /login Empty email field', () => {
     
     before(async () => {
       chaiHttpResponse = await chai
@@ -53,7 +53,7 @@ describe('Test login route', () => {
     });
   })
 
-  describe('Inexistent user', () => {
+  describe('POST /login Inexistent user', () => {
     
     before(async () => {
       chaiHttpResponse = await chai
@@ -68,9 +68,33 @@ describe('Test login route', () => {
     it('returns status code 401', async () => {
       expect(chaiHttpResponse).to.have.status(401);
     });
-  
     it('returns a message', async () => {  
       expect(chaiHttpResponse.body).to.have.property('message');
+    });
+  })
+
+  describe('GET /login/validate Valid user', () => {
+    
+    before(async () => {
+      const loginResponse = await chai
+      .request(app)
+      .get('/login')
+      .send({
+       email: 'user@user.com',
+       password: 'secret_user',
+     });
+
+     chaiHttpResponse = await chai
+     .request(app)
+     .get('/login/validate')
+     .set('authorization', loginResponse.body.token);
+    });
+
+    it('returns status code 200', async () => {
+      expect(chaiHttpResponse).to.have.status(200);
+    });
+    it('returns logged in role', async () => {  
+      expect(chaiHttpResponse.body).to.be.eql({ role: 'user'});
     });
   })
 
