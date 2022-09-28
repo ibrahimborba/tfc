@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import UsersService from '../services/user.service';
 
-class UserController {
+export default class UserController {
   constructor(private service = new UsersService()) { }
 
   public login:RequestHandler = async (req, res) => {
@@ -10,6 +10,10 @@ class UserController {
     if (!token) return res.status(status).json({ message });
     return res.status(status).json({ token });
   };
-}
 
-export default UserController;
+  public getRole:RequestHandler = async (req, res) => {
+    const { email } = res.locals;
+    const { role } = await this.service.findOne(email);
+    return res.status(200).json({ role });
+  };
+}

@@ -1,7 +1,7 @@
 import UserModel from '../models/user.model';
 import tokenHelper from '../helpers/token';
 import BcryptHelper from '../helpers/bcrypt';
-import { ILogin, loginValidate } from '../interfaces/ILogin';
+import { IUser, loginValidate } from '../interfaces/IUser';
 
 type LoginResponse = {
   status: number,
@@ -15,7 +15,7 @@ export default class UserService {
     this.model = new UserModel();
   }
 
-  public async login(loginInput: ILogin): Promise<LoginResponse> {
+  public async login(loginInput: IUser): Promise<LoginResponse> {
     const result = await this.model.findOne(loginInput.email);
     const { error } = loginValidate.validate(loginInput);
     if (error) {
@@ -29,5 +29,10 @@ export default class UserService {
 
     const token = tokenHelper.create({ email: result.email });
     return { status: 200, token };
+  }
+
+  public async findOne(email: string): Promise<IUser> {
+    const result = await this.model.findOne(email);
+    return result;
   }
 }

@@ -1,8 +1,10 @@
 import * as Joi from 'joi';
 
-interface ILogin {
+interface IUser {
   email: string;
   password: string;
+  username?: string;
+  role?: string;
 }
 
 const REQUIRED_FIELD = '400|All fields must be filled';
@@ -22,4 +24,4 @@ const loginValidate = Joi.object({
   }),
 });
 
-export { ILogin, loginValidate };
+export { IUser, loginValidate };
