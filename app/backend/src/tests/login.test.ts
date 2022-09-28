@@ -53,4 +53,25 @@ describe('Test login route', () => {
     });
   })
 
+  describe('Inexistent user', () => {
+    
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send({
+       email: 'usuario@user.com',
+       password: 'secret_user',
+     });
+    });
+
+    it('returns status code 401', async () => {
+      expect(chaiHttpResponse).to.have.status(401);
+    });
+  
+    it('returns a message', async () => {  
+      expect(chaiHttpResponse.body).to.have.property('message');
+    });
+  })
+
 });
