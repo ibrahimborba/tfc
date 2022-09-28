@@ -3,6 +3,11 @@ import tokenHelper from '../helpers/token';
 import BcryptHelper from '../helpers/bcrypt';
 import { ILogin, loginValidate } from '../interfaces/ILogin';
 
+type LoginResponse = {
+  status: number,
+  message?: string,
+  token?: string,
+};
 export default class UserService {
   public model: UserModel;
 
@@ -10,14 +15,19 @@ export default class UserService {
     this.model = new UserModel();
   }
 
-  public async login(loginInput: ILogin): Promise<string> {
+  public async login(loginInput: ILogin): Promise<LoginResponse> {
     const result = await this.model.findOne(loginInput.email);
     const { error } = loginValidate.validate(loginInput);
-    if (error) return error.message;
+    if (error) {
+      const [status, message] = error.message.split('|');
+      return { status: Number(status), message };
+    }
 
-    BcryptHelper.compare(loginInput.password, result.password);
+    if (!result || !BcryptHelper.compare(result.password, loginInput.password)) {
+      return { status: 401, message: 'Incorrect email or password' };
+    }
 
     const token = tokenHelper.create({ email: result.email });
-    return token;
+    return { status: 200, token };
   }
 }
