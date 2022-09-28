@@ -2,10 +2,7 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-
 import { app } from '../app';
-import User from '../database/models/user';
-
 import { Response } from 'superagent';
 
 chai.use(chaiHttp);
@@ -14,16 +11,6 @@ const { expect } = chai;
 
 describe('Test login route', () => {
   let chaiHttpResponse: Response;
-
-  before(async () => {
-    sinon
-      .stub(User, "findOne")
-      .resolves({ } as User);
-  });
-
-  after(()=>{
-    (User.findOne as sinon.SinonStub).restore();
-  })
 
   describe('Valid user', () => {
     
