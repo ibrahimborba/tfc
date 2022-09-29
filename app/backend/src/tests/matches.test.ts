@@ -85,18 +85,17 @@ describe('Test matches routes', () => {
   })
 
   describe('PATCH /matches/:id/finish', () => {
-    let validateResponse: Response;
     before(async () => {
      chaiHttpResponse = await chai
      .request(app)
-     .post('/matches/45/finish');
+     .patch('/matches/45/finish');
     });
 
     it('returns status code 200', async () => {
-      expect(validateResponse).to.have.status(200);
+      expect(chaiHttpResponse).to.have.status(200);
     });
     it('returns an object with a message', async () => {
-      expect(validateResponse.body).to.have.property('message');
+      expect(chaiHttpResponse.body).to.have.property('message');
     });
   })
 
