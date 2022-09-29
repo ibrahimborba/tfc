@@ -84,6 +84,37 @@ describe('Test matches routes', () => {
     });
   })
 
+  describe('POST /matches same team error', () => {
+    let validateResponse: Response;
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send({
+       email: 'user@user.com',
+       password: 'secret_user',
+     });
+
+     validateResponse = await chai
+     .request(app)
+     .post('/matches')
+     .set('authorization', chaiHttpResponse.body.token)
+     .send({
+      homeTeam: 16,
+      awayTeam: 16,
+      homeTeamGoals: 2,
+      awayTeamGoals: 2,
+    });
+    });
+
+    it('returns status code 401', async () => {
+      expect(validateResponse).to.have.status(401);
+    });
+    it('returns an object with a message', async () => {
+      expect(chaiHttpResponse.body).to.have.property('message');
+    });
+  })
+
   describe('PATCH /matches/:id/finish', () => {
     before(async () => {
      chaiHttpResponse = await chai
