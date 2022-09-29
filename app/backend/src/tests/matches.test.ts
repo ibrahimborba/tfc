@@ -33,4 +33,24 @@ describe('Test teams routes', () => {
     });
   })
 
+  describe('GET /matches with query', () => {
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .get('/matches?inProgress=true');
+    });
+
+    it('returns status code 200', async () => {
+      expect(chaiHttpResponse).to.have.status(200);
+    });
+  
+    it('returns an array', async () => {  
+      expect(chaiHttpResponse.body).to.be.an('array');
+    });
+
+    it('returns an array that elements are objects with teams names', async () => {  
+      expect(chaiHttpResponse.body[0].inProgress).to.be.equal(true);
+    });
+  })
+
 });
