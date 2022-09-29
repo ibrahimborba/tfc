@@ -11,6 +11,9 @@ router.route('/')
   .post(authMiddleware.tokenValidation, matchesController.create);
 
 router.route('/:id/finish')
-  .patch(matchesController.update);
+  .patch(matchesController.finishMatch);
+
+router.route('/:id')
+  .patch(matchesController.updateGoals);
 
 export default router;

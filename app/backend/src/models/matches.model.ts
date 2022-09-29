@@ -1,6 +1,7 @@
 import Team from '../database/models/team';
 import matchModel from '../database/models/match';
 import IMatch from '../interfaces/IMatch';
+import IGoals from '../interfaces/IGoals';
 
 export default class MatchesModel {
   public model = matchModel;
@@ -31,8 +32,14 @@ export default class MatchesModel {
     return result;
   }
 
-  public async update(id: string): Promise<string> {
+  public async finishMatch(id: string): Promise<string> {
     await this.model.update({ inProgress: false }, { where: { id } });
     return 'Finished';
+  }
+
+  public async updateGoals(goals: IGoals): Promise<string> {
+    const { id, homeTeamGoals, awayTeamGoals } = goals;
+    await this.model.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    return 'Updated';
   }
 }

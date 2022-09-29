@@ -20,9 +20,17 @@ export default class MatchesController {
     return res.status(status).json(result);
   };
 
-  public update:RequestHandler = async (req, res) => {
+  public finishMatch:RequestHandler = async (req, res) => {
     const { id } = req.params;
-    const message = await this.service.update(id);
+    const message = await this.service.finishMatch(id);
+    return res.status(200).json({ message });
+  };
+
+  public updateGoals:RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const goals = { id, homeTeamGoals, awayTeamGoals };
+    const message = await this.service.updateGoals(goals);
     return res.status(200).json({ message });
   };
 }
