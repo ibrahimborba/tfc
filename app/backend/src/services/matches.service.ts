@@ -22,4 +22,9 @@ export default class MatchesService {
     const result = await this.model.create({ ...match, inProgress: true });
     return result;
   }
+
+  public async update(id: string): Promise<string> {
+    const result = await this.model.update(id);
+    return result;
+  }
 }

@@ -30,4 +30,9 @@ export default class MatchesModel {
     const result = await this.model.create(match);
     return result;
   }
+
+  public async update(id: string): Promise<string> {
+    await this.model.update({ inProgress: false }, { where: { id } });
+    return 'Finished';
+  }
 }

@@ -10,4 +10,7 @@ router.route('/')
   .get(matchesController.findAll)
   .post(authMiddleware.tokenValidation, matchesController.create);
 
+router.route('/:id/finish')
+  .patch(matchesController.update);
+
 export default router;
