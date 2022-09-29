@@ -53,4 +53,30 @@ describe('Test teams routes', () => {
     });
   })
 
+  describe('POST /matches', () => {
+    let validateResponse: Response;
+
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send({
+       email: 'user@user.com',
+       password: 'secret_user',
+     });
+
+     validateResponse = await chai
+     .request(app)
+     .post('/matches')
+     .set('authorization', chaiHttpResponse.body.token);
+    });
+
+    it('returns status code 201', async () => {
+      expect(validateResponse).to.have.status(201);
+    });
+    it('returns an object', async () => {  
+      expect(chaiHttpResponse.body).to.be.an('object');
+    });
+  })
+
 });
