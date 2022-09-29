@@ -161,4 +161,23 @@ describe('Test matches routes', () => {
     });
   })
 
+  describe('PATCH /matches/:id', () => {
+    before(async () => {
+     chaiHttpResponse = await chai
+     .request(app)
+     .patch('/matches/1')
+     .send({
+      homeTeamGoals: 3,
+      awayTeamGoals: 1,
+      });
+    });
+
+    it('returns status code 200', async () => {
+      expect(chaiHttpResponse).to.have.status(200);
+    });
+    it('returns an object with a message', async () => {
+      expect(chaiHttpResponse.body).to.have.property('message');
+    });
+  })
+
 });
