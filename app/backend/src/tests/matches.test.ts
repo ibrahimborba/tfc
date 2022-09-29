@@ -9,7 +9,7 @@ import { response } from 'express';
 chai.use(chaiHttp);
 const { expect } = chai;
 
-describe('Test teams routes', () => {
+describe('Test matches routes', () => {
   let chaiHttpResponse: Response;
 
   describe('GET /matches', () => {
@@ -55,7 +55,6 @@ describe('Test teams routes', () => {
 
   describe('POST /matches', () => {
     let validateResponse: Response;
-
     before(async () => {
       chaiHttpResponse = await chai
       .request(app)
@@ -68,14 +67,20 @@ describe('Test teams routes', () => {
      validateResponse = await chai
      .request(app)
      .post('/matches')
-     .set('authorization', chaiHttpResponse.body.token);
+     .set('authorization', chaiHttpResponse.body.token)
+     .send({
+      homeTeam: 16,
+      awayTeam: 8,
+      homeTeamGoals: 2,
+      awayTeamGoals: 2,
+    });
     });
 
     it('returns status code 201', async () => {
       expect(validateResponse).to.have.status(201);
     });
-    it('returns an object', async () => {  
-      expect(chaiHttpResponse.body).to.be.an('object');
+    it('returns an object', async () => {
+      expect(validateResponse.body).to.be.an('object');
     });
   })
 
