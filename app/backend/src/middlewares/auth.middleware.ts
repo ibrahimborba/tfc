@@ -10,7 +10,7 @@ const tokenValidation:RequestHandler = (req, res, next) => {
     next();
   } catch (err) {
     console.error(err);
-    return res.status(401).json({ message: 'Invalid token' });
+    return res.status(401).json({ message: 'Token must be a valid token' });
   }
 };
 
