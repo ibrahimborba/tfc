@@ -27,8 +27,24 @@ describe('Test teams routes', () => {
       expect(chaiHttpResponse.body).to.be.an('array');
     });
 
-    it('returns an array that elements are objects with table names', async () => {  
+    it('returns an array that elements are objects with teams names', async () => {  
       expect(chaiHttpResponse.body[0]).to.have.property('teamName');
+    });
+  })
+
+  describe('GET /teams/:id', () => {
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .get('/teams/1');
+    });
+
+    it('returns status code 200', async () => {
+      expect(chaiHttpResponse).to.have.status(200);
+    });
+
+    it('returns an object with team names', async () => {  
+      expect(chaiHttpResponse.body).to.have.property('teamName');
     });
   })
 
