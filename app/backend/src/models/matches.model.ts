@@ -25,4 +25,9 @@ export default class MatchesModel {
     });
     return result;
   }
+
+  public async create(match: IMatch): Promise<IMatch> {
+    const result = await this.model.create(match);
+    return result;
+  }
 }

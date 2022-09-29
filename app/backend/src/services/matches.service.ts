@@ -17,4 +17,9 @@ export default class MatchesService {
     const result = await this.model.findAll();
     return result;
   }
+
+  public async create(match: IMatch): Promise<IMatch> {
+    const result = await this.model.create({ ...match, inProgress: true });
+    return result;
+  }
 }
