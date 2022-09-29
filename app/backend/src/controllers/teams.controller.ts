@@ -8,4 +8,10 @@ export default class TeamsController {
     const result = await this.service.findAll();
     return res.status(200).json(result);
   };
+
+  public findByPk:RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const result = await this.service.findByPk(id);
+    return res.status(200).json(result);
+  };
 }
