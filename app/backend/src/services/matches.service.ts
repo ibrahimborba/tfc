@@ -18,7 +18,10 @@ export default class MatchesService {
     return result;
   }
 
-  public async create(match: IMatch): Promise<IMatch> {
+  public async create(match: IMatch): Promise<IMatch | null> {
+    if (match.homeTeam === match.awayTeam) {
+      return null;
+    }
     const result = await this.model.create({ ...match, inProgress: true });
     return result;
   }
