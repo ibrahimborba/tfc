@@ -13,13 +13,11 @@ export default class MatchesController {
   public create:RequestHandler = async (req, res) => {
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
     const match = { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals };
-    const result = await this.service.create(match);
+    const { status, message, result } = await this.service.create(match);
     if (!result) {
-      return res.status(401).json({
-        message: 'It is not possible to create a match with two equal teams',
-      });
+      return res.status(status).json({ message });
     }
-    return res.status(201).json(result);
+    return res.status(status).json(result);
   };
 
   public update:RequestHandler = async (req, res) => {
