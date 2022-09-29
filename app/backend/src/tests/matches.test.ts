@@ -111,7 +111,7 @@ describe('Test matches routes', () => {
       expect(validateResponse).to.have.status(401);
     });
     it('returns an object with a message', async () => {
-      expect(chaiHttpResponse.body).to.have.property('message');
+      expect(validateResponse.body).to.have.property('message');
     });
   })
 
