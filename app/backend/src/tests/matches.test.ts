@@ -115,6 +115,37 @@ describe('Test matches routes', () => {
     });
   })
 
+  describe('POST /matches inexistent team error', () => {
+    let validateResponse: Response;
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send({
+       email: 'user@user.com',
+       password: 'secret_user',
+     });
+
+     validateResponse = await chai
+     .request(app)
+     .post('/matches')
+     .set('authorization', chaiHttpResponse.body.token)
+     .send({
+      homeTeam: 100,
+      awayTeam: 16,
+      homeTeamGoals: 2,
+      awayTeamGoals: 2,
+    });
+    });
+
+    it('returns status code 404', async () => {
+      expect(validateResponse).to.have.status(404);
+    });
+    it('returns an object with a message', async () => {
+      expect(validateResponse.body).to.have.property('message');
+    });
+  })
+
   describe('PATCH /matches/:id/finish', () => {
     before(async () => {
      chaiHttpResponse = await chai
