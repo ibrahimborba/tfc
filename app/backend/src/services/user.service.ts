@@ -6,11 +6,7 @@ import ValidationError from '../errors/ValidationError';
 import AuthenticationError from '../errors/AuthenticationError';
 
 export default class UserService {
-  public model: UserModel;
-
-  constructor() {
-    this.model = new UserModel();
-  }
+  constructor(private model: UserModel) { }
 
   public async login(loginInput: IUser): Promise<string> {
     const result = await this.model.findOne(loginInput.email);
