@@ -1,16 +1,16 @@
 import { RequestHandler } from 'express';
+import AuthenticationError from '../errors/AuthenticationError';
 import tokenHelper from '../helpers/token';
 
 const tokenValidation:RequestHandler = (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization) return res.status(401).json({ message: 'Token not found' });
+  if (!authorization) throw new AuthenticationError('Token not found');
   try {
     const result = tokenHelper.validate(authorization);
     res.locals.email = result.email;
     next();
   } catch (err) {
-    console.error(err);
-    return res.status(401).json({ message: 'Token must be a valid token' });
+    throw new AuthenticationError('Token must be a valid token');
   }
 };
 
