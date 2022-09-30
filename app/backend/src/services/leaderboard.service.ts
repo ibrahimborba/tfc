@@ -2,19 +2,7 @@ import TeamsModel from '../models/teams.model';
 import MatchesModel from '../models/matches.model';
 import IMatch from '../interfaces/IMatch';
 import ITeam from '../interfaces/ITeam';
-
-type TeamBoard = {
-  name: string,
-  totalPoints: number,
-  totalGames: number,
-  totalDraws: number,
-  totalVictories: number,
-  totalLosses: number,
-  goalsFavor: number,
-  goalsOwn: number,
-  goalsBalance: number,
-  efficiency: string,
-};
+import ITeamBoard from '../interfaces/ITeamBoard';
 
 export default class LeaderboardService {
   public teamModel: TeamsModel;
@@ -25,7 +13,7 @@ export default class LeaderboardService {
     this.matchModel = new MatchesModel();
   }
 
-  public async findAll(): Promise<TeamBoard[]> {
+  public async findAll(): Promise<ITeamBoard[]> {
     const matches = await this.matchModel.queryAll(false);
     const teams = await this.teamModel.findAll();
     const homeTeams = teams.filter((team) => matches
@@ -61,7 +49,7 @@ export default class LeaderboardService {
     efficiency: '',
   });
 
-  private static calcLeaderboard = (acc: TeamBoard, match: IMatch) => {
+  private static calcLeaderboard = (acc: ITeamBoard, match: IMatch) => {
     const { goalsFavor, goalsOwn, goalsBalance } = LeaderboardService.calcGoals(acc, match);
     const { totalPoints, totalGames, totalDraws, totalVictories, totalLosses } = LeaderboardService
       .calcTotals(acc, match);
@@ -81,14 +69,14 @@ export default class LeaderboardService {
     };
   };
 
-  private static calcGoals = (acc: TeamBoard, match: IMatch) => {
+  private static calcGoals = (acc: ITeamBoard, match: IMatch) => {
     const goalsFavor = acc.goalsFavor + match.homeTeamGoals;
     const goalsOwn = acc.goalsOwn + match.awayTeamGoals;
     const goalsBalance = goalsFavor - goalsOwn;
     return { goalsFavor, goalsOwn, goalsBalance };
   };
 
-  private static calcTotals = (acc: TeamBoard, match: IMatch) => {
+  private static calcTotals = (acc: ITeamBoard, match: IMatch) => {
     const totalGames = Number(acc.totalGames) + 1;
     const totalDraws = acc.totalDraws + Number(match.homeTeamGoals === match.awayTeamGoals);
     const totalVictories = acc.totalVictories + Number(match.homeTeamGoals > match.awayTeamGoals);
