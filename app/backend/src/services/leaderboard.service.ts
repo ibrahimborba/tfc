@@ -18,11 +18,16 @@ export default class LeaderboardService {
     const teams = await this.teamModel.findAll();
     const homeTeams = teams.filter((team) => matches
       .some((match) => match.teamHome?.teamName === team.teamName))
-      .map(LeaderboardService.generateLeaderboard);
+      .map(LeaderboardService.generateTeamBoard);
 
-    const leaderboard = homeTeams.map((team) => matches.reduce((acc, match) => {
+    const leaderboard = await LeaderboardService.generateLeaderboard(homeTeams, matches);
+    return leaderboard;
+  }
+
+  private static generateLeaderboard(teams: ITeamBoard[], matches: IMatch[]): ITeamBoard[] {
+    const leaderboard = teams.map((team) => matches.reduce((acc, match) => {
       if (match.teamHome?.teamName === team.name) {
-        return LeaderboardService.calcLeaderboard(acc, match);
+        return LeaderboardService.calcTeamBoard(acc, match);
       }
       return acc;
     }, { ...team }));
@@ -36,7 +41,7 @@ export default class LeaderboardService {
     return leaderboard;
   }
 
-  private static generateLeaderboard = (team: ITeam) => ({
+  private static generateTeamBoard = (team: ITeam) => ({
     name: team.teamName,
     totalPoints: 0,
     totalGames: 0,
@@ -49,7 +54,7 @@ export default class LeaderboardService {
     efficiency: '',
   });
 
-  private static calcLeaderboard = (acc: ITeamBoard, match: IMatch) => {
+  private static calcTeamBoard = (acc: ITeamBoard, match: IMatch) => {
     const { goalsFavor, goalsOwn, goalsBalance } = LeaderboardService.calcGoals(acc, match);
     const { totalPoints, totalGames, totalDraws, totalVictories, totalLosses } = LeaderboardService
       .calcTotals(acc, match);
