@@ -8,4 +8,9 @@ export default class LeaderboardController {
     const result = await this.service.findAllHome();
     return res.status(200).json(result);
   };
+
+  public findAllAway:RequestHandler = async (_req, res) => {
+    const result = await this.service.findAllAway();
+    return res.status(200).json(result);
+  };
 }
