@@ -13,7 +13,7 @@ export default class LeaderboardService {
     this.matchModel = new MatchesModel();
   }
 
-  public async findAll(): Promise<ITeamBoard[]> {
+  public async findAllHome(): Promise<ITeamBoard[]> {
     const matches = await this.matchModel.queryAll(false);
     const teams = await this.teamModel.findAll();
     const homeTeams = teams.filter((team) => matches
