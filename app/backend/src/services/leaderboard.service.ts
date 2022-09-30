@@ -35,6 +35,15 @@ export default class LeaderboardService {
     return leaderboard;
   }
 
+  public async findAll(): Promise<ITeamBoard[]> {
+    const matches = await this.matchModel.queryAll(false);
+    const teams = await this.teamModel.findAll();
+    const allTeams = teams.map(LeaderboardService.generateTeamBoard);
+
+    const leaderboard = await LeaderboardService.generateLeaderboard(allTeams, matches);
+    return leaderboard;
+  }
+
   private static generateLeaderboard(teams: ITeamBoard[], matches: IMatch[]): ITeamBoard[] {
     const leaderboard = teams.map((team) => matches.reduce((acc, match) => {
       if (match.teamHome?.teamName === team.name) {
