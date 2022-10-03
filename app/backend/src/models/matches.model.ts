@@ -40,10 +40,28 @@ export default class MatchesModel {
     return editedMatches;
   }
 
+  public async queryAllAway(): Promise<IEditedMatch[]> {
+    const result = await this.model.findAll({
+      where: { inProgress: false },
+      include: [
+        { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+      ],
+    });
+
+    const editedMatches = result.map(MatchesModel.generateAwayMatch);
+    return editedMatches;
+  }
+
   private static generateHomeMatch = (match: IMatch) => ({
     currTeamName: match.teamHome?.teamName,
     currTeamGoals: match.homeTeamGoals,
     rivalTeamGoals: match.awayTeamGoals,
+  });
+
+  private static generateAwayMatch = (match: IMatch) => ({
+    currTeamName: match.teamAway?.teamName,
+    currTeamGoals: match.awayTeamGoals,
+    rivalTeamGoals: match.homeTeamGoals,
   });
 
   public async create(match: IMatch): Promise<IMatch> {

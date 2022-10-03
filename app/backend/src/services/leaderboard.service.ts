@@ -21,21 +21,21 @@ export default class LeaderboardService {
       .some((match) => match.currTeamName === team.teamName))
       .map(LeaderboardService.generateTeamBoard);
 
-    const leaderboard = await LeaderboardService.generateLeaderboard(homeTeams, matches);
+    const leaderboard = LeaderboardService.generateLeaderboard(homeTeams, matches);
+    return leaderboard;
+  }
+
+  public async findAllAway(): Promise<ITeamBoard[]> {
+    const matches = await this.matchModel.queryAllAway();
+    const teams = await this.teamModel.findAll();
+    const awayTeams = teams.filter((team) => matches
+      .some((match) => match.currTeamName === team.teamName))
+      .map(LeaderboardService.generateTeamBoard);
+
+    const leaderboard = LeaderboardService.generateLeaderboard(awayTeams, matches);
     return leaderboard;
   }
   /*
-  public async findAllAway(): Promise<ITeamBoard[]> {
-    const matches = await this.matchModel.queryAll(false);
-    const teams = await this.teamModel.findAll();
-    const awayTeams = teams.filter((team) => matches
-      .some((match) => match.teamAway?.teamName === team.teamName))
-      .map(LeaderboardService.generateTeamBoard);
-
-    const leaderboard = await LeaderboardService.generateLeaderboard(awayTeams, matches);
-    return leaderboard;
-  }
-
   public async findAll(): Promise<ITeamBoard[]> {
     const matches = await this.matchModel.queryAll(false);
     const teams = await this.teamModel.findAll();
