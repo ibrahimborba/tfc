@@ -17,44 +17,47 @@ export default class LeaderboardService {
   public async findAllHome(): Promise<ITeamBoard[]> {
     const matches = await this.matchModel.queryAllHome();
     const teams = await this.teamModel.findAll();
-    const homeTeams = teams.filter((team) => matches
+    const emptyLeaderboard = teams.filter((team) => matches
       .some((match) => match.currTeamName === team.teamName))
-      .map(LeaderboardService.generateTeamBoard);
+      .map(LeaderboardService.createTeamBoard);
 
-    const leaderboard = LeaderboardService.generateLeaderboard(homeTeams, matches);
-    return leaderboard;
+    const leaderboard = LeaderboardService.createLeaderboard(emptyLeaderboard, matches);
+    const sortedLeaderboard = LeaderboardService.sortLeaderboard(leaderboard);
+    return sortedLeaderboard;
   }
 
   public async findAllAway(): Promise<ITeamBoard[]> {
     const matches = await this.matchModel.queryAllAway();
     const teams = await this.teamModel.findAll();
-    const awayTeams = teams.filter((team) => matches
+    const emptyLeaderboard = teams.filter((team) => matches
       .some((match) => match.currTeamName === team.teamName))
-      .map(LeaderboardService.generateTeamBoard);
+      .map(LeaderboardService.createTeamBoard);
 
-    const leaderboard = LeaderboardService.generateLeaderboard(awayTeams, matches);
-    return leaderboard;
+    const leaderboard = LeaderboardService.createLeaderboard(emptyLeaderboard, matches);
+    const sortedLeaderboard = LeaderboardService.sortLeaderboard(leaderboard);
+    return sortedLeaderboard;
   }
-  /*
+
   public async findAll(): Promise<ITeamBoard[]> {
-    const matches = await this.matchModel.queryAll(false);
+    const homeMatches = await this.matchModel.queryAllHome();
+    const awayMatches = await this.matchModel.queryAllAway();
     const teams = await this.teamModel.findAll();
-    const allTeams = teams.map(LeaderboardService.generateTeamBoard);
+    const allTeams = teams.map(LeaderboardService.createTeamBoard);
 
-    const leaderboard = await LeaderboardService.generateLeaderboard(allTeams, matches);
-    return leaderboard;
-  } */
+    const homeLeaderboard = LeaderboardService.createLeaderboard(allTeams, homeMatches);
+    const allLeaderboard = LeaderboardService.createLeaderboard(homeLeaderboard, awayMatches);
+    const sortedLeaderboard = LeaderboardService.sortLeaderboard(allLeaderboard);
+    return sortedLeaderboard;
+  }
 
-  private static generateLeaderboard(teams: ITeamBoard[], matches: IEditedMatch[]): ITeamBoard[] {
+  private static createLeaderboard(teams: ITeamBoard[], matches: IEditedMatch[]): ITeamBoard[] {
     const leaderboard = teams.map((team) => matches.reduce((acc, match) => {
       if (match.currTeamName === team.name) {
         return LeaderboardService.calcTeamBoard(acc, match);
       }
       return acc;
     }, { ...team }));
-
-    const sortedLeaderboard = LeaderboardService.sortLeaderboard(leaderboard);
-    return sortedLeaderboard;
+    return leaderboard;
   }
 
   private static sortLeaderboard = (leaderboard: ITeamBoard[]): ITeamBoard[] => {
@@ -67,7 +70,7 @@ export default class LeaderboardService {
     return leaderboard;
   };
 
-  private static generateTeamBoard = (team: ITeam) => ({
+  private static createTeamBoard = (team: ITeam) => ({
     name: team.teamName,
     totalPoints: 0,
     totalGames: 0,
