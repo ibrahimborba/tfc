@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import LeaderboardService from '../services/leaderboard.service';
 
 export default class LeaderboardController {
-  constructor(private service = new LeaderboardService()) { }
+  constructor(private service: LeaderboardService) { }
 
   public findAllHome:RequestHandler = async (_req, res) => {
     const result = await this.service.findAllHome();

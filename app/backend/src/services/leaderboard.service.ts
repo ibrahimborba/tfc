@@ -1,20 +1,11 @@
 import TeamsModel from '../models/teams.model';
 import MatchesModel from '../models/matches.model';
-// import IMatch from '../interfaces/IMatch';
 import ITeam from '../interfaces/ITeam';
 import ITeamBoard from '../interfaces/ITeamBoard';
 import IEditedMatch from '../interfaces/IEditedMatch';
-import Team from '../database/models/team';
-import Match from '../database/models/match';
 
 export default class LeaderboardService {
-  public teamModel: TeamsModel;
-  public matchModel: MatchesModel;
-
-  constructor() {
-    this.teamModel = new TeamsModel(Team);
-    this.matchModel = new MatchesModel(Match);
-  }
+  constructor(private teamModel: TeamsModel, private matchModel: MatchesModel) { }
 
   public async findAllHome(): Promise<ITeamBoard[]> {
     const matches = await this.matchModel.queryAllHome();
