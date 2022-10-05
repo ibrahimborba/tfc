@@ -1,5 +1,5 @@
 import User from '../database/models/user';
-import { IUser } from '../interfaces/IUser';
+import IUser from '../interfaces/IUser';
 
 export default class UserModel {
   constructor(private model: typeof User) {}
