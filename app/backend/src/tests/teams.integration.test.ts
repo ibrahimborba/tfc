@@ -4,13 +4,22 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import { app } from '../app';
 import { Response } from 'superagent';
-import { response } from 'express';
+import Team from '../database/models/team';
+import * as TeamsMock from './mocks/Teams.json';
+import * as OneTeamMock from './mocks/OneTeam.json';
 
 chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Test teams routes', () => {
   let chaiHttpResponse: Response;
+
+  before(() => {
+    sinon.stub(Team, 'findAll').resolves(TeamsMock as Team[]);
+    sinon.stub(Team, 'findByPk').resolves(OneTeamMock as Team);
+  });
+
+  after(() => { sinon.restore(); });
 
   describe('GET /teams', () => {
     before(async () => {
@@ -23,12 +32,8 @@ describe('Test teams routes', () => {
       expect(chaiHttpResponse).to.have.status(200);
     });
   
-    it('returns an array', async () => {  
-      expect(chaiHttpResponse.body).to.be.an('array');
-    });
-
-    it('returns an array that elements are objects with teams names', async () => {  
-      expect(chaiHttpResponse.body[0]).to.have.property('teamName');
+    it('returns an array of teams', async () => {  
+      expect(chaiHttpResponse.body).to.be.deep.equal(TeamsMock);
     });
   })
 
@@ -44,7 +49,7 @@ describe('Test teams routes', () => {
     });
 
     it('returns an object with team names', async () => {  
-      expect(chaiHttpResponse.body).to.have.property('teamName');
+      expect(chaiHttpResponse.body).to.be.deep.equal(OneTeamMock);
     });
   })
 
