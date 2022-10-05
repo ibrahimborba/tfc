@@ -68,6 +68,7 @@ describe('Test login routes', () => {
         .set('authorization', chaiHttpResponse.body.token);
         
         expect(validateResponse.body).to.have.property('role');
+        expect(validateResponse.body.role).to.be.equal('user');
       });
     })
 
