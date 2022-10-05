@@ -5,6 +5,7 @@ import ITeam from '../interfaces/ITeam';
 import ITeamBoard from '../interfaces/ITeamBoard';
 import IEditedMatch from '../interfaces/IEditedMatch';
 import Team from '../database/models/team';
+import Match from '../database/models/match';
 
 export default class LeaderboardService {
   public teamModel: TeamsModel;
@@ -12,7 +13,7 @@ export default class LeaderboardService {
 
   constructor() {
     this.teamModel = new TeamsModel(Team);
-    this.matchModel = new MatchesModel();
+    this.matchModel = new MatchesModel(Match);
   }
 
   public async findAllHome(): Promise<ITeamBoard[]> {

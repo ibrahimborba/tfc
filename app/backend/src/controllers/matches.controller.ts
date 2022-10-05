@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import MatchesService from '../services/matches.service';
 
 export default class MatchesController {
-  constructor(private service = new MatchesService()) { }
+  constructor(private service: MatchesService) { }
 
   public findAll:RequestHandler = async (req, res) => {
     const { inProgress } = req.query;

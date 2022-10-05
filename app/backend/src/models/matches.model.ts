@@ -1,11 +1,11 @@
 import Team from '../database/models/team';
-import matchModel from '../database/models/match';
+import Match from '../database/models/match';
 import IMatch from '../interfaces/IMatch';
 import IGoals from '../interfaces/IGoals';
 import IEditedMatch from '../interfaces/IEditedMatch';
 
 export default class MatchesModel {
-  public model = matchModel;
+  constructor(private model: typeof Match) {}
 
   public async findAll(): Promise<IMatch[]> {
     const result = await this.model.findAll({
