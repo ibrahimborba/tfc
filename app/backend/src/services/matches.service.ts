@@ -2,6 +2,7 @@ import MatchesModel from '../models/matches.model';
 import TeamsModel from '../models/teams.model';
 import IMatch from '../interfaces/IMatch';
 import IGoals from '../interfaces/IGoals';
+import Team from '../database/models/team';
 
 interface MatchResponse {
   status: number;
@@ -14,7 +15,7 @@ export default class MatchesService {
 
   constructor() {
     this.model = new MatchesModel();
-    this.teamsModel = new TeamsModel();
+    this.teamsModel = new TeamsModel(Team);
   }
 
   public async findAll(inProgress: string): Promise<IMatch[]> {

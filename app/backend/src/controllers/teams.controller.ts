@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import TeamsService from '../services/teams.service';
 
 export default class TeamsController {
-  constructor(private service = new TeamsService()) { }
+  constructor(private service: TeamsService) { }
 
   public findAll:RequestHandler = async (_req, res) => {
     const result = await this.service.findAll();

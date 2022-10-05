@@ -4,13 +4,14 @@ import MatchesModel from '../models/matches.model';
 import ITeam from '../interfaces/ITeam';
 import ITeamBoard from '../interfaces/ITeamBoard';
 import IEditedMatch from '../interfaces/IEditedMatch';
+import Team from '../database/models/team';
 
 export default class LeaderboardService {
   public teamModel: TeamsModel;
   public matchModel: MatchesModel;
 
   constructor() {
-    this.teamModel = new TeamsModel();
+    this.teamModel = new TeamsModel(Team);
     this.matchModel = new MatchesModel();
   }
 
