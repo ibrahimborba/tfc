@@ -18,11 +18,8 @@ export default class MatchesController {
     try {
       const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
       const match = { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals };
-      const { status, message, result } = await this.service.create(match);
-      if (!result) {
-        return res.status(status).json({ message });
-      }
-      return res.status(status).json(result);
+      const result = await this.service.create(match);
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
