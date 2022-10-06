@@ -47,6 +47,7 @@ cd backend
 npm run dev
 ```
 ### Run front-end application after running Docker
+*Front-end was developed by Trybe's team*
 ```
 cd frontend
 npm start
